@@ -15,8 +15,7 @@ data class Challenge(
     override val name: String,
     override val difficulty: Difficulty,
     override val duration: Int,
-    override var completed: Boolean = false,
     override val techStack: MutableSet<String>,
-    override val challengeValue: Int = 20,
-    override val certification: String
+    override val certification: String,
+    override val challengeValue: Int = 20
 ) : IContent

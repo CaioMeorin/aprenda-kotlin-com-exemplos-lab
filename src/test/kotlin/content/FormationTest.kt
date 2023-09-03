@@ -11,19 +11,19 @@ import src.utils.Difficulty
 class FormationTest {
 
     private val content: IContent =
-        ContentFactory(
+        ContentFactory.createContent(
             "Kotlin",
             Difficulty.BEGINNER,
             60,
             techStack = mutableSetOf("Android", "Kotlin")
         )
     private val content2: IContent =
-        ContentFactory(
+        ContentFactory.createContent(
             "Kotlin Project",
             Difficulty.BEGINNER,
             60,
             challengeValue = 200,
-            techStack = mutableSetOf("Android","Kotlin","OOP")
+            techStack = mutableSetOf("Android", "Kotlin", "OOP")
         )
     private val formation: Formation = Formation.Builder()
         .setName("Android with Kotlin")
@@ -43,20 +43,11 @@ class FormationTest {
     @Test
     fun `Completing formation`() {
         formation.completeContent(student)
-        println("Formation marked as completed: ${formation.getCompleted()}")
-        assertEquals(true, formation.getCompleted())
-        formation.getUniqueContents().forEach {
-            println("Individual ${it.name} marked as complete: ${it.completed}")
-        }
-
     }
+
     @Test
     fun `Completing individual content`() {
         formation.completeContent(student, content)
-        assertEquals(true, content.completed)
-        formation.getUniqueContents().forEach {
-            println("Individual ${it.name} marked as complete: ${it.completed}")
-        }
     }
 
     @Test
@@ -67,7 +58,7 @@ class FormationTest {
     }
 
     @Test
-    fun `True if name is equal to Android with Kotlin`(){
+    fun `True if name is equal to Android with Kotlin`() {
         assertEquals("Android with Kotlin", formation.getName())
     }
 
@@ -77,20 +68,14 @@ class FormationTest {
     }
 
     @Test
-    fun `Formation duration should be exactly equal the sum of every content's duration`(){
+    fun `Formation duration should be exactly equal the sum of every content's duration`() {
         println("Duration: ${formation.getDuration()}")
         assertEquals(120, formation.getDuration())
     }
 
-    @Test
-    fun `Shall pass if getCompleted is equal to true after completing the formation`(){
-        assertEquals(false, formation.getCompleted())
-        formation.completeContent(student)
-        assertEquals(true, formation.getCompleted())
-    }
 
     @Test
-    fun `uniqueTechStacks should be exactly equal the union of all content's stacks` () {
+    fun `uniqueTechStacks should be exactly equal the union of all content's stacks`() {
         println("value for UniqueTechStacks: ${formation.getUniqueTechStacks()}")
         assertEquals(mutableSetOf("Android", "Kotlin", "OOP"), formation.getUniqueTechStacks())
     }

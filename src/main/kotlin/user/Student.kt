@@ -11,8 +11,8 @@ package src.user
 
 data class Student(val name: String, val dateOfBirth: String, var email: String) {
     private var reputation: Int = 0
-    private lateinit var phoneNumber: String
-    private lateinit var address: String
+    private var phoneNumber: String = ""
+    private var address: String = ""
     private var totalPoints: Int = 0
     private var completedContents: MutableSet<String> = mutableSetOf()
     private var completedFormations: MutableSet<String> = mutableSetOf()

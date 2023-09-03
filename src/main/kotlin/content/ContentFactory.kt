@@ -12,21 +12,20 @@ package src.content
 import src.utils.Difficulty
 import kotlin.math.abs
 
-data class ContentFactory(
-    override val name: String,
-    override val difficulty: Difficulty,
-    override val duration: Int,
-    override var completed: Boolean = false,
-    override val techStack: MutableSet<String> = mutableSetOf(),
-    override var challengeValue: Int = Int.MIN_VALUE
-) : IContent {
+object ContentFactory {
+    private const val NO_CHALLENGE: Int = Int.MIN_VALUE
 
-    override val certification: String = name
-    fun createContent(): IContent {
+    fun createContent(
+        name: String,
+        difficulty: Difficulty,
+        duration: Int,
+        techStack: MutableSet<String>,
+        challengeValue: Int = NO_CHALLENGE
+    ): IContent {
+        val certification: String = name
         return when (challengeValue) {
-            Int.MIN_VALUE -> Course(name, difficulty, duration, completed, techStack, certification)
-            else -> Challenge(name, difficulty, duration, completed, techStack, abs(challengeValue), certification)
+            NO_CHALLENGE -> Course(name, difficulty, duration, techStack, certification)
+            else -> Challenge(name, difficulty, duration, techStack, certification, abs(challengeValue))
         }
     }
-
 }

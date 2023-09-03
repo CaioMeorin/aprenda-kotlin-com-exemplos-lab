@@ -13,13 +13,16 @@ import src.user.Student
 
 class Formation private constructor(builder: Builder) {
 
+    companion object {
+        private const val NO_CHALLENGE: Int = Int.MIN_VALUE
+    }
 
-    private var name: String
+    private val name: String
     private var uniqueTechStacks: MutableSet<String> = mutableSetOf()
     private var uniqueStudents: MutableSet<Student> = mutableSetOf()
     private var uniqueContents: Set<IContent>
     private var duration: Int = 0
-    private var completed: Boolean = false
+    private var certification: String
 
     class Builder {
         private lateinit var name: String
@@ -34,6 +37,7 @@ class Formation private constructor(builder: Builder) {
 
     init {
         name = builder.getName()
+        certification = name
         uniqueContents = builder.getUniqueContents()
         combineContentStacks()
         combineContentDuration()
@@ -65,28 +69,28 @@ class Formation private constructor(builder: Builder) {
      * adding all of its contents as completedContents to the respective student
      */
     fun completeContent(student: Student, content: IContent? = null) {
-        if (content == null && !completed) {
+        if (content == null && !student.getCompletedFormations().contains(certification)) {
             uniqueContents.forEach {
                 when (it.challengeValue) {
-                    Int.MIN_VALUE -> {}
+                    NO_CHALLENGE -> {}
                     else -> student.addPoints(it.challengeValue)
                 }
-                student.addAcquiredCertification(it.certification)
-                student.addCompletedContent(it.name)
-                it.completed = true
+                if (!student.getCompletedContents().contains(it.name)) {
+                    student.addAcquiredCertification(it.certification)
+                    student.addCompletedContent(it.name)
+                }
             }
             student.addCompletedFormation(name)
             student.addStackSkill(uniqueTechStacks)
-            completed = true
-        } else if (content != null && !content.completed) {
+            student.addAcquiredCertification(certification)
+        } else if (content != null && !student.getCompletedContents().contains(content.name)) {
             when (content.challengeValue) {
-                Int.MIN_VALUE -> {}
+                NO_CHALLENGE -> {}
                 else -> student.addPoints(content.challengeValue)
             }
             student.addAcquiredCertification(content.certification)
             student.addCompletedContent(content.name)
             student.addStackSkill(content.techStack)
-            content.completed = true
         }
     }
 
@@ -94,7 +98,7 @@ class Formation private constructor(builder: Builder) {
     fun getName() = name
     fun getUniqueContents() = uniqueContents
     fun getDuration() = duration
-    fun getCompleted() = completed
     fun getUniqueTechStacks() = uniqueTechStacks
+    fun getCertification() = certification
 
 }

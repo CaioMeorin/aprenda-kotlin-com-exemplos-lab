@@ -15,9 +15,12 @@ data class Course(
     override val name: String,
     override val difficulty: Difficulty,
     override val duration: Int,
-    override var completed: Boolean = false,
     override val techStack: MutableSet<String>,
     override val certification: String
 ) : IContent {
-    override val challengeValue: Int = Int.MIN_VALUE
+    companion object {
+        private const val NO_CHALLENGE: Int = Int.MIN_VALUE
+    }
+
+    override val challengeValue: Int = NO_CHALLENGE
 }

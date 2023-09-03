@@ -15,7 +15,6 @@ sealed interface IContent {
     val name: String
     val difficulty: Difficulty
     val duration: Int
-    var completed: Boolean
     val techStack: MutableSet<String>
     val challengeValue: Int
     val certification: String
